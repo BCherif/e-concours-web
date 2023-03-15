@@ -46,7 +46,7 @@ export class EstablishmentsComponent implements OnInit, OnDestroy {
     establishments: Establishment[];
     isLoading: boolean = false;
     establishmentCount: number = 0;
-    establishmentColumns: string[] = ['name', 'description', 'active', 'details'];
+    establishmentColumns: string[] = ['image', 'name', 'description', 'active', 'details'];
     searchInputControl: FormControl = new FormControl();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     totalElements: number;
@@ -58,7 +58,7 @@ export class EstablishmentsComponent implements OnInit, OnDestroy {
      */
     constructor(private _changeDetectorRef: ChangeDetectorRef,
                 private _matDialog: MatDialog,
-                private _establishmentService: EstablishmentService) {
+                protected _establishmentService: EstablishmentService) {
     }
 
     ngOnInit() {
@@ -155,8 +155,8 @@ export class EstablishmentsComponent implements OnInit, OnDestroy {
             .subscribe((establishment: Establishment) => {
                 if (establishment) {
                     this.getAll();
-                    console.log('Establishment dialog was closed!');
                 }
             });
     }
+
 }

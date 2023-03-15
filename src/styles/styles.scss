@@ -2,3 +2,35 @@
 /*  @ Import/write your custom styles here.
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
 /* ----------------------------------------------------------------------------------------------------- */
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    border: none;
+    box-shadow: 2px 2px 4px 0 rgba(148, 148, 148, 0.6);
+    color: #FFF;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.25em;
+    font-weight: 500;
+    width: 100%;
+    padding: 10px;
+    background-color: #9b9b9b;
+}
+
+.uploadDialogDiv {
+    width: 100%;
+    padding: 16px;
+    color: #9b9b9b;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    border: #d0d0d0 dashed 1px;
+    text-align: center;
+}

@@ -27,7 +27,7 @@ export class CompetitionsComponent implements OnInit, OnDestroy {
     competitions: Competition[];
     isLoading: boolean = false;
     competitionsCount: number = 0;
-    competitionsColumns: string[] = ['title', 'deadline', 'competitionDate', 'quotation', 'active', 'details'];
+    competitionsColumns: string[] = ['image', 'title', 'deadline', 'competitionDate', 'quotation', 'active', 'details'];
     searchInputControl: FormControl = new FormControl();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     totalElements: number;
@@ -115,8 +115,8 @@ export class CompetitionsComponent implements OnInit, OnDestroy {
                 if (competition) {
                     this.getCompetitionsByPage();
                 }
-
             });
     }
+
 
 }

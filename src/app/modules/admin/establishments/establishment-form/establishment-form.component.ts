@@ -17,6 +17,10 @@ export class EstablishmentFormComponent implements OnInit {
     establishment: Establishment;
     action: string;
 
+    file: FormData = new FormData();
+
+    imageFile: any;
+
     quillModules: any = {
         toolbar: [
             ['bold', 'italic', 'underline'],
@@ -69,6 +73,9 @@ export class EstablishmentFormComponent implements OnInit {
         });
     }
 
+    loadFiles(event) {
+        this.imageFile = event.target.files[0];
+    }
 
     /**
      * close
@@ -83,7 +90,9 @@ export class EstablishmentFormComponent implements OnInit {
     send() {
         this.establishment = this.establishmentForm.getRawValue();
         if (!this.establishment.uid) {
-            this._establishmentService.save(this.establishment).subscribe((response: IResponse) => {
+            this.file.append('establishment', JSON.stringify(this.establishment));
+            this.file.append('imageUrl', this.imageFile);
+            this._establishmentService.create(this.file).subscribe((response: IResponse) => {
                 if (response.ok) {
                     this.matDialogRef.close(response.data);
                     this._toast.success(response.message);
@@ -92,7 +101,7 @@ export class EstablishmentFormComponent implements OnInit {
                 }
             })
         } else {
-            this._establishmentService.update(this.establishment.uid,this.establishment).subscribe((response: IResponse) => {
+            this._establishmentService.update(this.establishment.uid, this.establishment).subscribe((response: IResponse) => {
                 if (response.ok) {
                     this.matDialogRef.close(response.data);
                     this._toast.success(response.message);

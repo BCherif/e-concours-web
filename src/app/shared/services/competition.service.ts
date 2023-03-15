@@ -5,6 +5,7 @@ import {tap} from "rxjs/operators";
 import {environment} from "../../../environments/environment";
 import {IResponse} from "../http/response";
 import {Competition} from "../models/competition.model";
+import {Env} from "../utils/econcours.utils";
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,7 @@ export class CompetitionService {
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient) {
+    constructor(private _httpClient: HttpClient, private env: Env) {
         this.apiUrl = environment.API_SERVICE_URL + '/competitions';
     }
 
@@ -45,12 +46,17 @@ export class CompetitionService {
         return this._httpClient.get<IResponse>(this.apiUrl + '/findOne/' + competitionId, {})
     }
 
-    save(competition: Competition): Observable<IResponse> {
-        return this._httpClient.post<IResponse>(this.apiUrl + '/create', competition, {});
-    }
 
     update(uid: string, competition: Competition): Observable<any> {
         return this._httpClient.put<IResponse>(this.apiUrl + '/' + uid, competition, {});
+    }
+
+    create(obj: FormData): Observable<IResponse> {
+        return this._httpClient.post<IResponse>(this.apiUrl + "/create", obj, this.env.uploadOption);
+    }
+
+    downloadUrl(path: string): string {
+        return this.apiUrl + "/download/" + path;
     }
 }
 

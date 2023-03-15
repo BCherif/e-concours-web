@@ -3,7 +3,6 @@ import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ToastrService} from "ngx-toastr";
 import {Competition} from "../../../../../shared/models/competition.model";
 import {CompetitionService} from "../../../../../shared/services/competition.service";
-import {ActivatedRoute, Router} from "@angular/router";
 import {IResponse} from "../../../../../shared/http/response";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {Folder} from "../../../../../shared/models/folder.model";
@@ -29,6 +28,10 @@ export class CompetitionFormComponent implements OnInit {
     folders: Folder[] = [];
 
     action: string;
+
+    imageFile: any;
+
+    file: FormData = new FormData();
 
     /**
      * Constructor
@@ -145,6 +148,9 @@ export class CompetitionFormComponent implements OnInit {
         })
     }
 
+    loadFiles(event) {
+        this.imageFile = event.target.files[0];
+    }
 
     /**
      * close
@@ -162,7 +168,9 @@ export class CompetitionFormComponent implements OnInit {
         this.competition.establishment = this.establishment;
         this.competition.folders = this.folders;
         if (this.action === 'new') {
-            this._competitionService.save(this.competition).subscribe((response: IResponse) => {
+            this.file.append('competition', JSON.stringify(this.competition));
+            this.file.append('imageUrl', this.imageFile);
+            this._competitionService.create(this.file).subscribe((response: IResponse) => {
                 if (response.ok) {
                     this.matDialogRef.close(response.data);
                     this._toast.success(response.message);

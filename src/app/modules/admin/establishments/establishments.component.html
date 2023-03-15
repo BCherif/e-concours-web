@@ -64,6 +64,36 @@
                         [dataSource]="establishments"
                         [trackBy]="trackByFn">
 
+                        <ng-container matColumnDef="image">
+                            <th
+                                class="w-56 pl-26 bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                disableClear>
+                                Image
+                            </th>
+                            <td
+                                class="px-8"
+                                mat-cell
+                                *matCellDef="let establishment">
+                                <div class="flex items-center">
+                                    <span
+                                        class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
+                                        <img
+                                            class="w-8"
+                                            *ngIf="establishment?.imageUrl"
+                                            [src]="_establishmentService.downloadUrl(establishment?.imageUrl)" alt="">
+                                        <span
+                                            class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
+                                            *ngIf="!establishment?.imageUrl">
+                                            Pas d'image
+                                        </span>
+                                    </span>
+                                </div>
+                            </td>
+                        </ng-container>
+
                         <!-- Name -->
                         <ng-container matColumnDef="name">
                             <th

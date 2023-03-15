@@ -5,6 +5,7 @@ import {tap} from "rxjs/operators";
 import {environment} from "../../../environments/environment";
 import {Establishment} from "../models/establishment.model";
 import {IResponse} from "../http/response";
+import {Env} from "../utils/econcours.utils";
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,7 @@ export class EstablishmentService {
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient) {
+    constructor(private _httpClient: HttpClient, private env: Env) {
         this.apiUrl = environment.API_SERVICE_URL + '/establishments';
     }
 
@@ -41,10 +42,6 @@ export class EstablishmentService {
     }
 
 
-    save(establishment: Establishment) {
-        return this._httpClient.post(this.apiUrl, establishment, {});
-    }
-
     update(uid: string, establishment: Establishment) {
         return this._httpClient.put(this.apiUrl + '/' + uid, establishment, {});
     }
@@ -55,6 +52,14 @@ export class EstablishmentService {
 
     findAll(): Observable<Establishment[]> {
         return this._httpClient.get<Establishment[]>(this.apiUrl, {});
+    }
+
+    create(obj: FormData): Observable<IResponse> {
+        return this._httpClient.post<IResponse>(this.apiUrl + "/create", obj, this.env.uploadOption);
+    }
+
+    downloadUrl(path: string): string {
+        return this.apiUrl + "/download/" + path;
     }
 }
 

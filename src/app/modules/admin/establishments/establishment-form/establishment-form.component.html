@@ -29,6 +29,14 @@
             [modules]="quillModules">
         </quill-editor>
 
+        <div class="uploadDialogDiv mt-2">
+            <input type="file" accept="image/png, image/jpeg" name="uploadfile" (change)="loadFiles($event)"
+                   class="inputfile"
+                   id="imageFile"/>
+            <label for="imageFile"> Selectionner la photo </label> <br/>
+            <b>{{imageFile?.name}}</b>
+        </div>
+
         <!-- Actions -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
             <div class="-ml-2">

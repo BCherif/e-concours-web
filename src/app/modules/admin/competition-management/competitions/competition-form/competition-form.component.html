@@ -117,6 +117,13 @@
                         </mat-chip-grid>
                     </mat-form-field>
                 </div>
+                <div class="uploadDialogDiv mt-2">
+                    <input type="file" accept="image/png, image/jpeg" name="uploadfile" (change)="loadFiles($event)"
+                           class="inputfile"
+                           id="imageFile"/>
+                    <label for="imageFile"> Selectionner la photo </label> <br/>
+                    <b>{{imageFile?.name}}</b>
+                </div>
                 <div class="flex justify-end">
                     <button
                         class="px-8 mr-2"
