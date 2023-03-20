@@ -14,6 +14,7 @@ import {Competition} from "../../../../shared/models/competition.model";
 import {fuseAnimations} from "../../../../../@fuse/animations";
 import {MatDialog} from "@angular/material/dialog";
 import {CompetitionFormComponent} from "./competition-form/competition-form.component";
+import {CandidacyFormComponent} from "./candidacy-form/candidacy-form.component";
 
 @Component({
     selector: 'competitions',
@@ -113,6 +114,22 @@ export class CompetitionsComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed()
             .subscribe((competition: Competition) => {
                 if (competition) {
+                    this.getCompetitionsByPage();
+                }
+            });
+    }
+
+    applyAt(competition: Competition): void {
+        // Open the dialog
+        const dialogRef = this._matDialog.open(CandidacyFormComponent, {
+            data: {
+                competition: competition
+            }
+        });
+
+        dialogRef.afterClosed()
+            .subscribe(value => {
+                if (value) {
                     this.getCompetitionsByPage();
                 }
             });

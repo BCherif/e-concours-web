@@ -1,0 +1,146 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Candidature au concours {{competition?.title}}</div>
+        <button
+            mat-icon-button
+            (click)="close()"
+            [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
+          [formGroup]="horizontalStepperForm">
+        <mat-horizontal-stepper
+            [linear]="true"
+            #horizontalStepper>
+            <mat-step
+                [formGroupName]="'step1'"
+                [stepControl]="horizontalStepperForm.get('step1')"
+                #horizontalStepperStep1>
+                <ng-template matStepLabel>Informations générales</ng-template>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <input
+                            matInput
+                            [formControlName]="'lastName'"
+                            [placeholder]="'Nom'"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <input
+                            matInput
+                            [formControlName]="'firstName'"
+                            [placeholder]="'Prénom'"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <input
+                            matInput
+                            [formControlName]="'email'"
+                            [placeholder]="'E-mail'"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <input
+                            matInput
+                            [formControlName]="'phone'"
+                            [placeholder]="'Téléphone'"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <input
+                            matInput
+                            [formControlName]="'address'"
+                            [placeholder]="'Addresse'"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <input
+                            matInput
+                            [formControlName]="'placeOfBirth'"
+                            [placeholder]="'Lieu de naissance'"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <input
+                            matInput
+                            [formControlName]="'username'"
+                            [placeholder]="'Nom d\'utilisateur'"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <input
+                            matInput
+                            [formControlName]="'password'"
+                            [placeholder]="'Mot de passe'"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div class="flex justify-end">
+                    <button
+                        class="px-8"
+                        mat-flat-button
+                        [color]="'primary'"
+                        [disabled]="horizontalStepperStep1.stepControl.pristine || horizontalStepperStep1.stepControl.invalid"
+                        type="button"
+                        matStepperNext>
+                        Suivant
+                    </button>
+                </div>
+            </mat-step>
+
+            <mat-step
+                [formGroupName]="'step2'"
+                [stepControl]="horizontalStepperForm.get('step2')"
+                #horizontalStepperStep2>
+                <ng-template matStepLabel>Dossiers</ng-template>
+
+                <div class="uploadDialogDiv mt-2" accept="application/pdf" *ngFor="let folder of folders">
+                    <button (click)="loadDocument(folder)" class="btn-upload-audio">
+                        {{folder?.title}}
+                    </button>
+                    <br>
+                    <b [innerHTML]="getFileName(folder?.title)"></b>
+                </div>
+                <div class="flex justify-end m-2">
+                    <button
+                        class="px-8 mr-2"
+                        mat-flat-button
+                        [color]="'accent'"
+                        type="button"
+                        matStepperPrevious>
+                        Retour
+                    </button>
+                    <button
+                        class="px-8"
+                        mat-flat-button
+                        [color]="'primary'"
+                        [disabled]="horizontalStepperStep2.stepControl.invalid"
+                        type="button"
+                        (click)="save()"
+                        matStepperNext>
+                        Sauvegarder
+                    </button>
+                </div>
+            </mat-step>
+
+        </mat-horizontal-stepper>
+    </form>
+</div>

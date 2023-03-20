@@ -9,7 +9,7 @@ import {CoreAuthGuard} from "./shared/guard/auth.guard";
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/example'
-    {path: '', pathMatch: 'full', redirectTo: 'establishments'},
+    {path: '', pathMatch: 'full', redirectTo: 'competition-management/competitions'},
 
     // Redirect signed-in user to the '/example'
     //
@@ -75,6 +75,10 @@ export const appRoutes: Route[] = [
             {
                 path: 'establishments',
                 loadChildren: () => import('app/modules/admin/establishments/establishments.module').then(m => m.EstablishmentsModule)
+            },
+            {
+                path: 'candidacies',
+                loadChildren: () => import('app/modules/admin/candidacies/candidacies.module').then(m => m.CandidaciesModule)
             },
             {
                 path: 'example',

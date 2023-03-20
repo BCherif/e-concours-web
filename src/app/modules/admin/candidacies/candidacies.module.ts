@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {CompetitionsComponent} from "./competitions.component";
+import {Route, RouterModule} from '@angular/router';
+import {CandidaciesComponent} from "./candidacies.component";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatButtonModule} from "@angular/material/button";
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -15,29 +15,29 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatTableModule} from "@angular/material/table";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {SharedModule} from "../../../shared/shared.module";
 import {DialogModule} from "@angular/cdk/dialog";
 import {MatDialogModule} from "@angular/material/dialog";
 import {QuillModule} from "ngx-quill";
-import {competitionsRoutes} from "./competitions.routing";
-import {SharedModule} from "../../../../shared/shared.module";
-import {CompetitionFormComponent} from "./competition-form/competition-form.component";
-import {MatStepperModule} from "@angular/material/stepper";
-import {MatButtonToggleModule} from "@angular/material/button-toggle";
-import {MatChipsModule} from "@angular/material/chips";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatDividerModule} from "@angular/material/divider";
-import {MatLuxonDateModule} from "@angular/material-luxon-adapter";
-import {FuseHighlightModule} from "../../../../../@fuse/components/highlight";
-import {CandidacyFormComponent} from "./candidacy-form/candidacy-form.component";
+import {CandidacyResolvers} from "../../../shared/resolvers/candidacy.resolvers";
+import {FlexLayoutModule} from "@angular/flex-layout";
+
+const candidaciesRoutes: Route[] = [
+    {
+        path: '',
+        component: CandidaciesComponent,
+        resolve: {
+            candidacies: CandidacyResolvers,
+        }
+    }
+];
 
 @NgModule({
     declarations: [
-        CompetitionsComponent,
-        CompetitionFormComponent,
-        CandidacyFormComponent
+        CandidaciesComponent
     ],
     imports: [
-        RouterModule.forChild(competitionsRoutes),
+        RouterModule.forChild(candidaciesRoutes),
         MatButtonModule,
         MatCheckboxModule,
         MatFormFieldModule,
@@ -52,19 +52,12 @@ import {CandidacyFormComponent} from "./candidacy-form/candidacy-form.component"
         MatSlideToggleModule,
         MatTableModule,
         MatTooltipModule,
+        SharedModule,
         DialogModule,
         MatDialogModule,
         QuillModule.forRoot(),
-        MatStepperModule,
-        SharedModule,
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatChipsModule,
-        MatDatepickerModule,
-        MatDividerModule,
-        MatLuxonDateModule,
-        FuseHighlightModule
+        FlexLayoutModule,
     ]
 })
-export class CompetitionsModule {
+export class CandidaciesModule {
 }

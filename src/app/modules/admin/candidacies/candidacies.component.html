@@ -1,4 +1,4 @@
-<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-card dark:bg-transparent">
 
     <!-- Header -->
     <div
@@ -10,7 +10,7 @@
             <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
         </div>
         <!-- Title -->
-        <div class="text-4xl font-extrabold tracking-tight">Concours</div>
+        <div class="text-4xl font-extrabold tracking-tight">Candidatures</div>
         <!-- Actions -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
             <!-- Search -->
@@ -25,25 +25,26 @@
                     matInput
                     [formControl]="searchInputControl"
                     [autocomplete]="'off'"
-                    [placeholder]="'Recherche de concours'">
+                    [placeholder]="'Recherche de candidatures'">
             </mat-form-field>
-            <!-- Add product button -->
-            <button
-                (click)="openAddCompetitionDialog()"
-                class="ml-4"
-                mat-flat-button
-                [color]="'primary'">
-                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                <span class="ml-2 mr-1">Ajouter</span>
-            </button>
+
+            <!-- <button
+                 class="ml-4"
+                 mat-flat-button
+                 [color]="'primary'">
+                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                 <span class="ml-2 mr-1">Ajouter</span>
+             </button>-->
         </div>
     </div>
 
     <!-- Main -->
     <div class="flex flex-auto overflow-hidden">
+
+        <!-- Products list -->
         <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden">
 
-            <ng-container *ngIf="competitionsCount > 0; else noEstablishments">
+            <ng-container *ngIf="candidaciesCount > 0; else noCandidacies">
 
                 <!-- Table wrapper -->
                 <div class="overflow-x-auto sm:overflow-y-auto"
@@ -59,106 +60,68 @@
                         [matSortDisableClear]="true"
                         [matSortDirection]="'asc'"
                         [multiTemplateDataRows]="true"
-                        [dataSource]="competitions"
+                        [dataSource]="candidacies"
                         [trackBy]="trackByFn">
 
-                        <ng-container matColumnDef="image">
-                            <th
-                                class="w-56 pl-26 bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                                mat-header-cell
-                                *matHeaderCellDef
-                                mat-sort-header
-                                disableClear>
-                                Image
-                            </th>
-                            <td
-                                class="px-8"
-                                mat-cell
-                                *matCellDef="let competition">
-                                <div class="flex items-center">
-                                    <span
-                                        class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
-                                        <img
-                                            class="w-8"
-                                            *ngIf="competition?.imageUrl"
-                                            [src]="_competitionService.downloadUrl(competition?.imageUrl)" alt="">
-                                        <span
-                                            class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
-                                            *ngIf="!competition?.imageUrl">
-                                            Pas d'image
-                                        </span>
-                                    </span>
-                                </div>
-                            </td>
-                        </ng-container>
 
-                        <!-- Name -->
-                        <ng-container matColumnDef="title">
+                        <!-- candidate -->
+                        <ng-container matColumnDef="candidate">
                             <th
                                 class="bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 mat-sort-header
                                 disableClear>
-                                Titre
+                                Nom
                             </th>
                             <td
                                 class="pr-8 truncate"
                                 mat-cell
-                                *matCellDef="let competition">
-                                {{competition?.title}}
+                                *matCellDef="let candidacy">
+                                {{candidacy?.candidate?.fullName}}
                             </td>
                         </ng-container>
 
 
-                        <ng-container matColumnDef="quotation">
+                        <!-- competition -->
+                        <ng-container matColumnDef="competition">
                             <th
                                 class="bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 mat-sort-header
                                 disableClear>
-                                Quota
+                                Description
                             </th>
-                            <td
-                                class="pr-8"
+                            <td class="pr-8 truncate"
                                 mat-cell
-                                *matCellDef="let competition">
-                                {{competition?.quotation}}
+                                *matCellDef="let candidacy">
+                                {{candidacy?.competition?.title}}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="deadline">
+                        <!-- state -->
+                        <ng-container matColumnDef="state">
                             <th
                                 class="bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 mat-sort-header
                                 disableClear>
-                                Date limite
+                                Etat
                             </th>
-                            <td
-                                class="pr-8"
+                            <td class="pr-8 truncate"
                                 mat-cell
-                                *matCellDef="let competition">
-                                {{competition?.deadline | date: 'dd/MM/yy'}}
-                            </td>
-                        </ng-container>
+                                *matCellDef="let candidacy">
+                                <div class="priorities" fxLayout="row" fxLayoutAlign="start center">
+                                    <div class="priority" fxLayout="row" fxLayoutAlign="start center">
+                                        <div class="priority-color"
+                                             [ngStyle]="{'background-color': candidacy.state==='Refuse'?'#F44336':candidacy.state==='Instance'?'#FF9800':candidacy.state==='Accept'?'#388E3C':'#F44336'}">
 
-                        <ng-container matColumnDef="competitionDate">
-                            <th
-                                class="bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                                mat-header-cell
-                                *matHeaderCellDef
-                                mat-sort-header
-                                disableClear>
-                                Date de concours
-                            </th>
-                            <td
-                                class="pr-8"
-                                mat-cell
-                                *matCellDef="let competition">
-                                {{competition?.competitionDate | date: 'dd/MM/yy'}}
+                                        </div>
+                                        <div class="priority-label">{{statecandidacy[candidacy.state]}}</div>
+                                    </div>
+                                </div>
                             </td>
                         </ng-container>
 
@@ -175,14 +138,14 @@
                             <td
                                 class="pr-4"
                                 mat-cell
-                                *matCellDef="let competition">
+                                *matCellDef="let candidacy">
                                 <mat-icon
                                     class="text-green-400 icon-size-5"
-                                    *ngIf="competition?.enable"
+                                    *ngIf="candidacy?.enable"
                                     [svgIcon]="'heroicons_solid:check'"></mat-icon>
                                 <mat-icon
                                     class="text-gray-400 icon-size-5"
-                                    *ngIf="!competition?.enable"
+                                    *ngIf="!candidacy?.enable"
                                     [svgIcon]="'heroicons_solid:x'"></mat-icon>
                             </td>
                         </ng-container>
@@ -190,7 +153,7 @@
                         <!-- Details -->
                         <ng-container matColumnDef="details">
                             <th
-                                class="w-50 pr-8 bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                class="w-24 pr-8 bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                 mat-header-cell
                                 *matHeaderCellDef>
                                 Details
@@ -198,18 +161,11 @@
                             <td
                                 class="pr-8"
                                 mat-cell
-                                *matCellDef="let competition">
+                                *matCellDef="let candidacy">
                                 <button
-                                    class="min-w-10 min-h-7 h-7 px-2 m-2 leading-6"
+                                    class="min-w-10 min-h-7 h-7 px-2 leading-6"
                                     mat-stroked-button>
                                     <mat-icon class="icon-size-5" [svgIcon]=" 'heroicons_solid:pencil-alt'"></mat-icon>
-                                </button>
-
-                                <button (click)="applyAt(competition)"
-                                        class="min-w-10 min-h-7 h-7 px-2 leading-6"
-                                        mat-stroked-button>
-                                    <mat-icon class="icon-size-5"
-                                              [svgIcon]=" 'heroicons_solid:speakerphone'"></mat-icon>
                                 </button>
                             </td>
                         </ng-container>
@@ -217,11 +173,11 @@
                         <tr
                             class="shadow"
                             mat-header-row
-                            *matHeaderRowDef="competitionsColumns; sticky: true"></tr>
+                            *matHeaderRowDef="candidaciesColumns; sticky: true"></tr>
                         <tr
                             class="h-18 hover:bg-gray-100 dark:hover:bg-hover"
                             mat-row
-                            *matRowDef="let competition; columns: competitionsColumns;">
+                            *matRowDef="let candidacy; columns: candidaciesColumns;">
                         </tr>
 
                     </table>
@@ -231,7 +187,7 @@
                 <mat-paginator
                     class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
                     [ngClass]="{'pointer-events-none': isLoading}"
-                    (page)="getCompetitionsByPage($event)"
+                    (page)="getAll($event)"
                     [length]="totalElements"
                     [pageIndex]="page"
                     [pageSize]="size"
@@ -241,13 +197,15 @@
 
             </ng-container>
 
-            <ng-template #noEstablishments>
+            <ng-template #noCandidacies>
                 <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Il n'y a pas des
-                    établissements !
+                    candidatures !
                 </div>
             </ng-template>
 
         </div>
-    </div>
 
+    </div>
 </div>
+
+

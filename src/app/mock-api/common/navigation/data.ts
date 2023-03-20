@@ -65,5 +65,12 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:home',
         link: '/establishments'
+    },
+    {
+        id: 'candidacies',
+        title: 'Candidatures',
+        type: 'basic',
+        icon: 'heroicons_outline:speakerphone',
+        link: '/candidacies'
     }
 ];
