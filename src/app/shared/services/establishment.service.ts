@@ -12,6 +12,7 @@ import {Env} from "../utils/econcours.utils";
 })
 export class EstablishmentService {
     private _establishments: BehaviorSubject<IResponse | null> = new BehaviorSubject(null);
+    private _establishment: BehaviorSubject<IResponse | null> = new BehaviorSubject(null);
     readonly apiUrl: string;
 
     /**
@@ -26,6 +27,10 @@ export class EstablishmentService {
      */
     get establishments$(): Observable<IResponse> {
         return this._establishments.asObservable();
+    }
+
+    get establishment$(): Observable<IResponse> {
+        return this._establishment.asObservable();
     }
 
     /**
@@ -47,7 +52,11 @@ export class EstablishmentService {
     }
 
     findOne(uid: string): Observable<IResponse> {
-        return this._httpClient.get<IResponse>(this.apiUrl + '/findOne/' + uid, {})
+        return this._httpClient.get<IResponse>(this.apiUrl + '/findOne/' + uid, {}).pipe(
+            tap((establishment) => {
+                this._establishment.next(establishment);
+            })
+        )
     }
 
     findAll(): Observable<Establishment[]> {

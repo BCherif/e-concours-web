@@ -21,6 +21,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {QuillModule} from "ngx-quill";
 import {CandidacyResolvers} from "../../../shared/resolvers/candidacy.resolvers";
 import {FlexLayoutModule} from "@angular/flex-layout";
+import {CandidateVerificationComponent} from "./candidate-verification/candidate-verification.component";
 
 const candidaciesRoutes: Route[] = [
     {
@@ -34,7 +35,8 @@ const candidaciesRoutes: Route[] = [
 
 @NgModule({
     declarations: [
-        CandidaciesComponent
+        CandidaciesComponent,
+        CandidateVerificationComponent
     ],
     imports: [
         RouterModule.forChild(candidaciesRoutes),

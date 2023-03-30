@@ -1,0 +1,183 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Vérification de candidature</div>
+        <button
+            mat-icon-button
+            (click)="close()"
+            [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+        <div class="w-full max-w-3xl">
+            <form [formGroup]="candidacyForm">
+
+                <!-- Title -->
+                <div class="mt-4">
+                    <mat-form-field
+                        class="w-full"
+                        [subscriptSizing]="'dynamic'">
+                        <mat-label>Concours</mat-label>
+                        <mat-icon
+                            matPrefix
+                            class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                        <input
+                            matInput
+                            [formControlName]="'competition'">
+                    </mat-form-field>
+                </div>
+
+                <div class="mt-4">
+                    <div class="space-y-4">
+                        <div class="flex">
+                            <mat-form-field
+                                class="flex-auto"
+                                [subscriptSizing]="'dynamic'">
+                                <mat-label>Prénom</mat-label>
+                                <mat-icon
+                                    matPrefix
+                                    class="hidden sm:flex icon-size-5"
+                                    [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                <input
+                                    matInput
+                                    [formControlName]="'firstName'">
+                            </mat-form-field>
+                            <mat-form-field
+                                class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4"
+                                [subscriptSizing]="'dynamic'">
+                                <mat-label>Nom</mat-label>
+                                <mat-icon
+                                    matPrefix
+                                    class="hidden sm:flex icon-size-5"
+                                    [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                <input
+                                    matInput
+                                    [formControlName]="'lastName'">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="mt-4">
+                    <mat-form-field
+                        class="w-full"
+                        [subscriptSizing]="'dynamic'">
+                        <mat-label>Adresse</mat-label>
+                        <mat-icon
+                            matPrefix
+                            class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                        <input
+                            matInput
+                            [formControlName]="'address'">
+                    </mat-form-field>
+                </div>
+
+                <div class="mt-4">
+                    <mat-form-field
+                        class="w-full"
+                        [subscriptSizing]="'dynamic'">
+                        <mat-label>Email</mat-label>
+                        <mat-icon
+                            matPrefix
+                            class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_solid:mail'"></mat-icon>
+                        <input
+                            matInput
+                            [formControlName]="'email'">
+                    </mat-form-field>
+                </div>
+
+                <div class="mt-4">
+                    <mat-form-field
+                        class="w-full"
+                        [subscriptSizing]="'dynamic'">
+                        <mat-label>Téléphone</mat-label>
+                        <mat-icon
+                            matPrefix
+                            class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_solid:phone'"></mat-icon>
+                        <input
+                            matInput
+                            [formControlName]="'phone'">
+                    </mat-form-field>
+                </div>
+
+                <div class="mt-4">
+                    <mat-form-field
+                        class="w-full"
+                        [subscriptSizing]="'dynamic'">
+                        <mat-label>Lieu de naissance</mat-label>
+                        <mat-icon
+                            matPrefix
+                            class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_solid:cake'"></mat-icon>
+                        <input
+                            matInput
+                            [formControlName]="'placeOfBirth'">
+                    </mat-form-field>
+                </div>
+
+                <div class="uploadDialogDiv mt-2" accept="application/pdf"
+                     *ngFor="let attachment of candidacy?.attachments">
+                    <a target="_blank" href="{{_candidacyService.downloadUrl(attachment?.filePath)}}">
+                        {{attachment?.fileName}}
+                    </a>
+                </div>
+
+                <!-- Notes -->
+                <div class="mt-4">
+                    <mat-form-field
+                        class="w-full"
+                        [subscriptSizing]="'dynamic'">
+                        <mat-label>Notes</mat-label>
+                        <mat-icon
+                            matPrefix
+                            class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_solid:menu-alt-2'"></mat-icon>
+                        <textarea
+                            matInput
+                            [formControlName]="'note'"
+                            [placeholder]="'Notes'"
+                            [rows]="5"
+                            [spellcheck]="false"
+                            cdkTextareaAutosize></textarea>
+                    </mat-form-field>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                    <div class="flex items-center mt-4 sm:mt-0">
+                        <button (click)="update('Refuser')"
+                                mat-button
+                                [color]="'warn'"
+                                [matTooltip]="'Refuser'">
+                            Refuser
+                        </button>
+                        <!-- Cancel -->
+                        <button style="color: orange" (click)="update('Instance')"
+                                class="ml-auto"
+                                mat-button
+                                [matTooltip]="'Instance'">
+                            Instance
+                        </button>
+                        <button style="color: green" (click)="update('Accepter')"
+                                class="ml-2"
+                                mat-flat-button
+                                [matTooltip]="'Accepter'">
+                            Accepter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>

@@ -13,6 +13,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {Candidacy} from "../../../shared/models/candidacy.model";
 import {STATE_CANDIDACY} from "../../../shared/enums/enumeration";
 import {CandidacyService} from "../../../shared/services/candidacy.service";
+import {CandidateVerificationComponent} from "./candidate-verification/candidate-verification.component";
 
 @Component({
     selector: 'candidacies',
@@ -118,6 +119,22 @@ export class CandidaciesComponent implements OnInit, OnDestroy {
             this.totalElements = value['data'].totalElements;
             this._changeDetectorRef.markForCheck();
         });
+    }
+
+    checkCandidate(candidacy: Candidacy): void {
+        // Open the dialog
+        const dialogRef = this._matDialog.open(CandidateVerificationComponent, {
+            data: {
+                candidacy: candidacy
+            }
+        });
+
+        dialogRef.afterClosed()
+            .subscribe(value => {
+                if (value) {
+                    this.getAll();
+                }
+            });
     }
 
 

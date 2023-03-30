@@ -115,6 +115,8 @@ export class CompetitionFormComponent implements OnInit {
             step1: this._formBuilder.group({
                 uid: [''],
                 title: ['', Validators.required],
+                description: ['', Validators.required],
+                price: ['', Validators.required],
                 establishment: ['', Validators.required],
                 deadline: ['', Validators.required],
                 competitionDate: ['', Validators.required],

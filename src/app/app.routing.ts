@@ -81,9 +81,13 @@ export const appRoutes: Route[] = [
                 loadChildren: () => import('app/modules/admin/candidacies/candidacies.module').then(m => m.CandidaciesModule)
             },
             {
+                path: 'employees',
+                loadChildren: () => import('app/modules/admin/employee/employee.module').then(m => m.EmployeeModule)
+            },
+            {
                 path: 'example',
                 loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)
-            },
+            }
         ]
     }
 ];

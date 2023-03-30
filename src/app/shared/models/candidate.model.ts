@@ -1,4 +1,6 @@
-export class Candidate {
+import {Entity} from "../_core/entity";
+
+export class Candidate extends Entity {
     lastName: string;
 
     firstName: string;

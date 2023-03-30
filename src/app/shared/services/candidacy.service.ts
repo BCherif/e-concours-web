@@ -5,6 +5,7 @@ import {tap} from "rxjs/operators";
 import {environment} from "../../../environments/environment";
 import {IResponse} from "../http/response";
 import {Env} from "../utils/econcours.utils";
+import {Candidacy} from "../models/candidacy.model";
 
 @Injectable({
     providedIn: 'root'
@@ -44,6 +45,18 @@ export class CandidacyService {
 
     create(obj: FormData): Observable<IResponse> {
         return this._httpClient.post<IResponse>(this.apiUrl + "/create", obj, this.env.uploadOption);
+    }
+
+    findOne(uid: string): Observable<IResponse> {
+        return this._httpClient.get<IResponse>(this.apiUrl + '/findOne/' + uid, {})
+    }
+
+    downloadUrl(path: string): string {
+        return this.apiUrl + "/download/" + path;
+    }
+
+    update(uid: string, candidacy: Candidacy): Observable<IResponse> {
+        return this._httpClient.put<IResponse>(this.apiUrl + '/' + uid, candidacy, {})
     }
 
 }
