@@ -6,14 +6,12 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {Subject, takeUntil} from 'rxjs';
 import {Employee} from "../../../shared/models/employee.model";
 import {EmployeeService} from "../../../shared/services/employee.service";
 import {IResponse} from "../../../shared/http/response";
 import {EstablishmentService} from "../../../shared/services/establishment.service";
 import {Establishment} from "../../../shared/models/establishment.model";
-import {EstablishmentFormComponent} from "../establishments/establishment-form/establishment-form.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EmployeeFormComponent} from "./employee-form/employee-form.component";
 
@@ -36,8 +34,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _employeeService: EmployeeService,
         protected _establishmentService: EstablishmentService,
-        private _matDialog: MatDialog,
-        private _route: ActivatedRoute
+        private _matDialog: MatDialog
     ) {
     }
 

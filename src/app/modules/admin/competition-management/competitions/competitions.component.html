@@ -30,9 +30,9 @@
             <!-- Add product button -->
             <button
                 (click)="openAddCompetitionDialog()"
-                class="ml-4"
+                class="bg-accent ml-4"
                 mat-flat-button
-                [color]="'primary'">
+                [color]="'accent'">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                 <span class="ml-2 mr-1">Ajouter</span>
             </button>
@@ -200,11 +200,16 @@
                                 mat-cell
                                 *matCellDef="let competition">
                                 <button
-                                    class="min-w-10 min-h-7 h-7 px-2 m-2 leading-6"
+                                    class="min-w-10 min-h-7 h-7 px-2  leading-6"
                                     mat-stroked-button>
                                     <mat-icon class="icon-size-5" [svgIcon]=" 'heroicons_solid:pencil-alt'"></mat-icon>
                                 </button>
-
+                                <button [routerLink]="'/accepted-candidacies/'+competition?.uid"
+                                        class="min-w-10 min-h-7 h-7 m-2 px-2 leading-6"
+                                        mat-stroked-button>
+                                    <mat-icon class="icon-size-5"
+                                              [svgIcon]=" 'heroicons_solid:check-circle'"></mat-icon>
+                                </button>
                                 <button (click)="applyAt(competition)"
                                         class="min-w-10 min-h-7 h-7 px-2 leading-6"
                                         mat-stroked-button>

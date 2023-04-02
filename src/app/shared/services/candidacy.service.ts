@@ -12,6 +12,7 @@ import {Candidacy} from "../models/candidacy.model";
 })
 export class CandidacyService {
     private _candidacies: BehaviorSubject<IResponse | null> = new BehaviorSubject(null);
+    private _acceptedCandidacies: BehaviorSubject<IResponse | null> = new BehaviorSubject(null);
     readonly apiUrl: string;
 
     /**
@@ -29,6 +30,10 @@ export class CandidacyService {
         return this._candidacies.asObservable();
     }
 
+    get acceptedCandidacies$(): Observable<IResponse> {
+        return this._acceptedCandidacies.asObservable();
+    }
+
     /**
      * Get candidacies
      */
@@ -36,11 +41,34 @@ export class CandidacyService {
         page = page || 0;
         size = size || 10;
         return this._httpClient.get<IResponse>(this.apiUrl + '/page?page=' + page + '&size=' + size + '&query=' + query, {}).pipe(
-            tap((competitions) => {
-                this._candidacies.next(competitions);
+            tap((candidacies) => {
+                this._candidacies.next(candidacies);
             })
         );
     }
+
+    /**
+     * Get accepted candidacies
+     */
+    getAcceptedCandidacies(competitionUid: string, page?, size?, query?): Observable<IResponse> {
+        page = page || 0;
+        size = size || 10;
+        return this._httpClient.get<IResponse>(this.apiUrl + '/candidacies-accept/' + competitionUid, {}).pipe(
+            tap((candidacies) => {
+                this._acceptedCandidacies.next(candidacies);
+            })
+        );
+    }
+
+    /*   getAcceptedCandidacies(competitionUid: string, page?, size?, query?): Observable<IResponse> {
+           page = page || 0;
+           size = size || 10;
+           return this._httpClient.get<IResponse>(this.apiUrl + '/candidacies-accept/' + competitionUid + '/page?page=' + page + '&size=' + size + '&query=' + query, {}).pipe(
+               tap((candidacies) => {
+                   this._acceptedCandidacies.next(candidacies);
+               })
+           );
+       }*/
 
 
     create(obj: FormData): Observable<IResponse> {

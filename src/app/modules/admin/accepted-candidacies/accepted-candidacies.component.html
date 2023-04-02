@@ -1,0 +1,198 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <!-- Loader -->
+        <div
+            class="absolute inset-x-0 bottom-0"
+            *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        <!-- Title -->
+        <div class="text-4xl font-extrabold tracking-tight">
+            <span *ngIf="selection.isEmpty()">Candidatures</span>
+            <span *ngIf="selection.hasValue()">{{ selection.selected.length }}
+                Candidature<span *ngIf="selection.selected.length > 1">s</span> sélectionnée</span>
+        </div>
+        <!-- Actions -->
+        <div *ngIf="selection.hasValue()" class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <!-- Search -->
+            <!-- <mat-form-field
+                 class="fuse-mat-dense fuse-mat-rounded min-w-64"
+                 [subscriptSizing]="'dynamic'">
+                 <mat-icon
+                     class="icon-size-5"
+                     matPrefix
+                     [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                 <input
+                     matInput
+                     [formControl]="searchInputControl"
+                     [autocomplete]="'off'"
+                     [placeholder]="'Recherche de établissements'">
+             </mat-form-field>-->
+            <!-- Add product button -->
+            <button (click)="submit()"
+                    class="bg-accent ml-4"
+                    mat-flat-button
+                    [color]="'accent'">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Soumettre</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+
+        <!-- Candidacy list -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden">
+
+            <ng-container *ngIf="candidacyCount > 0; else noCandidacies">
+
+                <!-- Table wrapper -->
+                <div class="overflow-x-auto sm:overflow-y-auto"
+                     cdkScrollable>
+
+                    <!-- Table -->
+                    <table
+                        class="w-full min-w-320 table-fixed bg-transparent"
+                        [ngClass]="{'pointer-events-none': isLoading}"
+                        mat-table
+                        matSort
+                        [matSortActive]="'name'"
+                        [matSortDisableClear]="true"
+                        [matSortDirection]="'asc'"
+                        [multiTemplateDataRows]="true"
+                        [dataSource]="candidacies"
+                        [trackBy]="trackByFn">
+
+                        <ng-container matColumnDef="checkbox">
+                            <th class="bg-gray-50 dark:bg-black dark:bg-opacity-5" *matHeaderCellDef mat-header-cell>
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
+                                              [checked]="selection.hasValue() && isAllSelected()"
+                                              [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                              color="primary">
+                                </mat-checkbox>
+                            </th>
+                            <td *matCellDef="let row" class="w-4" mat-cell>
+                                <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                                              (click)="$event.stopPropagation()"
+                                              [checked]="selection.isSelected(row)"
+                                              color="primary">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+
+                        <!-- firstName -->
+                        <ng-container matColumnDef="firstName">
+                            <th
+                                class="bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                disableClear>
+                                Prénom
+                            </th>
+                            <td
+                                class="pr-8 truncate"
+                                mat-cell
+                                *matCellDef="let row">
+                                {{row?.candidate?.firstName}}
+                            </td>
+                        </ng-container>
+
+                        <!-- lastName -->
+                        <ng-container matColumnDef="lastName">
+                            <th
+                                class="bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                disableClear>
+                                Nom
+                            </th>
+                            <td
+                                class="pr-8 truncate"
+                                mat-cell
+                                *matCellDef="let row">
+                                {{row?.candidate?.lastName}}
+                            </td>
+                        </ng-container>
+
+                        <!-- email -->
+                        <ng-container matColumnDef="email">
+                            <th
+                                class="bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                disableClear>
+                                Email
+                            </th>
+                            <td
+                                class="pr-8 truncate"
+                                mat-cell
+                                *matCellDef="let row">
+                                {{row?.candidate?.email}}
+                            </td>
+                        </ng-container>
+
+                        <!-- email -->
+                        <ng-container matColumnDef="phone">
+                            <th
+                                class="bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                disableClear>
+                                Téléphone
+                            </th>
+                            <td
+                                class="pr-8 truncate"
+                                mat-cell
+                                *matCellDef="let row">
+                                {{row?.candidate?.phone}}
+                            </td>
+                        </ng-container>
+
+
+                        <tr
+                            class="shadow"
+                            mat-header-row
+                            *matHeaderRowDef="candidacyColumns; sticky: true"></tr>
+                        <tr
+                            class="h-18 hover:bg-gray-100 dark:hover:bg-hover"
+                            mat-row
+                            *matRowDef="let row; columns: candidacyColumns;">
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <mat-paginator
+                    class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                    [ngClass]="{'pointer-events-none': isLoading}"
+                    (page)="getAllByPage($event)"
+                    [length]="totalElements"
+                    [pageIndex]="page"
+                    [pageSize]="size"
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                    [showFirstLastButtons]="true">
+                </mat-paginator>
+
+            </ng-container>
+
+            <ng-template #noCandidacies>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Il n'y a pas des
+                    candidatures !
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+</div>
+
+
