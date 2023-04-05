@@ -17,6 +17,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ResultService} from "../../../shared/services/result.service";
 import {ToastrService} from "ngx-toastr";
 import {IResponse} from "../../../shared/http/response";
+import {Competition} from "../../../shared/models/competition.model";
+import {CompetitionService} from "../../../shared/services/competition.service";
+import {ResultSaveEntity} from "../../../shared/wrapper/result.save.entity";
 
 @Component({
     selector: 'accepted-candidacies',
@@ -57,6 +60,8 @@ export class AcceptedCandidaciesComponent implements OnInit, OnDestroy {
     page = 0;
     size = 10;
     competitionUid: string;
+    competition: Competition;
+    resultSaveEntity = new ResultSaveEntity();
     selection = new SelectionModel<Candidacy>(true, []);
 
     /**
@@ -68,8 +73,12 @@ export class AcceptedCandidaciesComponent implements OnInit, OnDestroy {
                 private _toast: ToastrService,
                 private router: Router,
                 protected _candidacyService: CandidacyService,
+                protected _competitionService: CompetitionService,
                 private _resultService: ResultService) {
         this.competitionUid = this.route.snapshot.params['competitionUid'];
+        if (this.competitionUid) {
+            this.getCompetition(this.competitionUid);
+        }
     }
 
     ngOnInit() {
@@ -134,6 +143,14 @@ export class AcceptedCandidaciesComponent implements OnInit, OnDestroy {
         return item.uid || index;
     }
 
+    getCompetition(competitionUid: string) {
+        this._competitionService.findOne(competitionUid).subscribe(value => {
+            if (value.ok) {
+                this.competition = value.data;
+            }
+        })
+    }
+
     getAllByPage(event?) {
         this._candidacyService.getAcceptedCandidacies(this.competitionUid, event?.pageIndex, event?.pageSize).subscribe((value) => {
             this.candidacies = value['data'].items;
@@ -145,7 +162,12 @@ export class AcceptedCandidaciesComponent implements OnInit, OnDestroy {
 
 
     submit() {
-        this._resultService.create(this.selection.selected).subscribe((response: IResponse) => {
+        this.resultSaveEntity.competitionUid = this.competitionUid;
+        this.resultSaveEntity.competitionTitle = this.competition.title;
+        this.resultSaveEntity.establishmentTitle = this.competition.establishment.name;
+        this.resultSaveEntity.establishmentUid = this.competition.establishment.uid;
+        this.resultSaveEntity.candidacies = this.selection.selected;
+        this._resultService.create(this.resultSaveEntity).subscribe((response: IResponse) => {
             if (response.ok) {
                 this._toast.success(response.message);
                 this.router.navigate(['/competition-management/competitions']);

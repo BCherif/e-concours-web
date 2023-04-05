@@ -3,7 +3,7 @@ import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {IResponse} from "../http/response";
-import {Candidacy} from "../models/candidacy.model";
+import {ResultSaveEntity} from "../wrapper/result.save.entity";
 
 @Injectable({
     providedIn: 'root'
@@ -19,8 +19,8 @@ export class ResultService {
     }
 
 
-    create(candidacies: Candidacy[]): Observable<IResponse> {
-        return this._httpClient.post<IResponse>(this.apiUrl + "/create", candidacies, {});
+    create(resultSaveEntity: ResultSaveEntity): Observable<IResponse> {
+        return this._httpClient.post<IResponse>(this.apiUrl + "/create", resultSaveEntity, {});
     }
 
 }
