@@ -20,6 +20,7 @@ import {DialogModule} from "@angular/cdk/dialog";
 import {MatDialogModule} from "@angular/material/dialog";
 import {QuillModule} from "ngx-quill";
 import {AcceptedCandidacyResolver} from "../../../shared/resolvers/candidacy.resolvers";
+import {AcceptedCandidacyFormComponent} from "./accepted-candidacy-form/accepted-candidacy-form.component";
 
 const candidaciesRoutes: Route[] = [
     {
@@ -33,7 +34,8 @@ const candidaciesRoutes: Route[] = [
 
 @NgModule({
     declarations: [
-        AcceptedCandidaciesComponent
+        AcceptedCandidaciesComponent,
+        AcceptedCandidacyFormComponent
     ],
     imports: [
         RouterModule.forChild(candidaciesRoutes),

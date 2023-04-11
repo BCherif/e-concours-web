@@ -16,10 +16,10 @@ import {SelectionModel} from "@angular/cdk/collections";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ResultService} from "../../../shared/services/result.service";
 import {ToastrService} from "ngx-toastr";
-import {IResponse} from "../../../shared/http/response";
 import {Competition} from "../../../shared/models/competition.model";
 import {CompetitionService} from "../../../shared/services/competition.service";
 import {ResultSaveEntity} from "../../../shared/wrapper/result.save.entity";
+import {AcceptedCandidacyFormComponent} from "./accepted-candidacy-form/accepted-candidacy-form.component";
 
 @Component({
     selector: 'accepted-candidacies',
@@ -167,11 +167,20 @@ export class AcceptedCandidaciesComponent implements OnInit, OnDestroy {
         this.resultSaveEntity.establishmentTitle = this.competition.establishment.name;
         this.resultSaveEntity.establishmentUid = this.competition.establishment.uid;
         this.resultSaveEntity.candidacies = this.selection.selected;
-        this._resultService.create(this.resultSaveEntity).subscribe((response: IResponse) => {
-            if (response.ok) {
-                this._toast.success(response.message);
-                this.router.navigate(['/competition-management/competitions']);
+
+        // Open the dialog
+        const dialogRef = this._matDialog.open(AcceptedCandidacyFormComponent, {
+            data: {
+                resultSaveEntity: this.resultSaveEntity
             }
-        })
+        });
+
+        dialogRef.afterClosed()
+            .subscribe(value => {
+                if (value) {
+                    this.getAllByPage();
+                }
+            });
     }
+
 }
